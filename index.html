@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spirit Box</title>
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#00ccff">
+
+<style>
+:root{
+  --accent:#00ccff;
+  --bg-dark:rgba(0,0,0,0.85);
+  --glass:rgba(0,0,0,0.6);
+  --light-bg:#f5f5f5;
+  --light-text:#222;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;font-family:Arial,sans-serif;}
+
+body{
+  background:url("https://images.unsplash.com/photo-1523580846011-d3a5bc25702b") center/cover fixed;
+  color:#fff;
+  transition:.4s;
+}
+
+body.light{
+  background:#eaeaea;
+  color:var(--light-text);
+}
+
+/* ===== LOADER ===== */
+#loader{
+  position:fixed; inset:0;
+  background:var(--bg-dark);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+
+#loader h1{
+  color:var(--accent);
+  animation:glow 1.5s infinite alternate;
+}
+
+@keyframes glow{
+  from{text-shadow:0 0 10px var(--accent);}
+  to{text-shadow:0 0 30px var(--accent);}
+}
+
+/* ===== HEADER ===== */
+header{
+  display:flex;
+  align-items:center;
+  padding:12px 16px;
+  background:var(--bg-dark);
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+
+.logo{
+  font-weight:800;
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.logo span{
+  color:var(--accent);
+  animation:glow 2s infinite alternate;
+}
+
+nav{
+  margin-left:auto;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+nav a{
+  color:var(--accent);
+  text-decoration:none;
+  font-weight:bold;
+  position:relative;
+}
+
+nav a::after{
+  content:"";
+  position:absolute;
+  left:0; bottom:-5px;
+  width:0; height:2px;
+  background:var(--accent);
+  transition:.3s;
+}
+
+nav a:hover::after{width:100%;}
+
+/* ===== DROPDOWN ===== */
+.dropdown{position:relative;}
+.dropbtn{
+  background:var(--accent);
+  border:none;
+  padding:8px 12px;
+  border-radius:6px;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 0 12px rgba(0,204,255,.5);
+}
+
+.dropdown-content{
+  position:absolute;
+  right:0;
+  top:110%;
+  background:var(--bg-dark);
+  border-radius:8px;
+  opacity:0;
+  transform:translateY(-10px);
+  pointer-events:none;
+  transition:.3s;
+}
+
+.dropdown-content a{
+  display:block;
+  padding:10px 14px;
+  color:var(--accent);
+}
+
+.dropdown:hover .dropdown-content{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+
+/* ===== TOP AD ===== */
+.top-ad{
+  margin:10px auto;
+  max-width:728px;
+  background:#111;
+  height:90px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 0 15px rgba(0,204,255,.3);
+}
+
+/* ===== LAYOUT ===== */
+.site{display:flex;}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+  width:260px;
+  background:var(--glass);
+  padding:20px;
+  position:fixed;
+  top:60px; bottom:0; left:0;
+  overflow:auto;
+  transition:.4s;
+  backdrop-filter:blur(8px);
+  box-shadow:0 0 20px rgba(0,204,255,.2);
+}
+
+.sidebar a{
+  display:block;
+  margin:10px 0;
+  color:var(--accent);
+  text-decoration:none;
+  padding:8px;
+  border-radius:6px;
+}
+
+.sidebar a:hover{
+  background:rgba(0,204,255,.1);
+  box-shadow:0 0 12px rgba(0,204,255,.4);
+}
+
+/* ===== LEFT AD ===== */
+.left-ad{
+  margin-top:20px;
+  height:250px;
+  background:#111;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* ===== MAIN ===== */
+.main{
+  margin-left:260px;
+  padding:20px;
+  width:100%;
+  max-width:900px;
+}
+
+/* ===== RIGHT AD ===== */
+.right-ad{
+  position:fixed;
+  right:15px;
+  top:140px;
+  width:160px;
+  height:600px;
+  background:#111;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 0 15px rgba(0,204,255,.3);
+}
+
+/* ===== CARD ===== */
+.card{
+  background:var(--glass);
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 0 20px rgba(0,204,255,.15);
+  margin-bottom:20px;
+}
+
+/* ===== BOTTOM AD ===== */
+.bottom-ad{
+  height:90px;
+  background:#111;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:20px 0;
+}
+
+/* ===== FLOAT BUTTONS ===== */
+.float{
+  position:fixed;
+  right:18px;
+  padding:12px 18px;
+  border-radius:999px;
+  background:var(--accent);
+  color:#000;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 0 15px rgba(0,204,255,.6);
+}
+
+#topBtn{bottom:30px;}
+#themeBtn{bottom:90px;}
+#contactBtn{bottom:150px;}
+
+/* ===== MOBILE ===== */
+#menuBtn{
+  display:none;
+  font-size:22px;
+  background:none;
+  border:none;
+  color:var(--accent);
+  margin-right:10px;
+}
+
+@media(max-width:900px){
+  #menuBtn{display:block;}
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.show{transform:translateX(0);}
+  .main{margin-left:0;}
+  .right-ad{display:none;} /* hide right ad on mobile */
+}
+</style>
+</head>
+
+<body>
+
+<div id="loader"><h1>✨ Spirite Box</h1></div>
+
+<header>
+  <button id="menuBtn">☰</button>
+  <div class="logo"><span>✨</span>Spirite Box</div>
+
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Notes</a>
+    <a href="#">Solutions</a>
+
+    <div class="dropdown">
+      <button class="dropbtn">Previous ▼</button>
+      <div class="dropdown-content">
+        <a href="#">2023</a>
+        <a href="#">2024</a>
+        <a href="#">2025</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- TOP AD -->
+
+
+<div class="site">
+  <aside class="sidebar" id="sidebar">
+    <h3>Subjects</h3>
+    <a href="#">Math</a>
+    <a href="#">Science</a>
+    <a href="#">English</a>
+    <a href="#">Social Studies</a>
+
+    <!-- LEFT AD -->
+    
+  </aside>
+
+  <main class="main">
+    <div class="card">
+      <h2>Welcome to Spirite Box</h2>
+       <p>Lets Bit YOUR GOALS.</p>
+        <H1>CBSE CLASS 9TH ICT Notes -:</H1>
+         <h2>Introduction to IT and ITES industry</h2>
+         <h3>1. Definition of ICT</h3>
+         <h4>ICT stands for Information and Communication Technology.</h4>
+         <h4>It is a broader term than IT (Information Technology) as
+           it includes the integration of telecommunications (phones,
+            wireless signals) and computers to allow users to access,
+             store, transmit, and manipulate information. </h4>
+          <h3>Information Technology Enabled Services (ITeS)</h3>
+          <h4>2.ITeS refers to outsourcing processes that are enabled 
+            by IT to improve efficiency and reduce costs. </h4>
+          <h4>Common Areas: Finance, HR, healthcare, and telecommunications.</h4>
+          <h4>Examples: Medical transcription, data entry, CRM (Customer
+             Relationship Management), and software development. </h4>
+          <h3>3. Business Process Outsourcing (BPO)</h3>
+          <h4>BPO is the contracting of specific business tasks to
+             external service providers. </h4>
+          <h4>Services include: Taxation, legal services, multimedia,
+             healthcare, and software testing.</h4>
+          <h4>BPM (Business Process Management): Focuses on managing 
+            and improving business processes to boost productivity and GDP. </h4>
+          <h3>4. Applications of ICT in Different Sectors</h3>
+          <h4>ICT has revolutionized various fields in 2025: </h4>
+          <h4>Education: Use of smart boards, e-learning platforms
+             (like ePathshala), and Learning Management Systems (LMS).</h4>
+          <h4>Healthcare: Electronic Health Records (EHRs), MRI, 
+            CAT scans, and telemedicine.</h4>
+          <h4>Banking: Online banking, ATMs, NEFT, and RTGS.</h4>
+          <h4>Governance (e-Governance): Digital India initiatives,
+             Aadhaar (UIDAI), and online railway bookings (IRCTC).</h4>
+          <h4>Everyday Life: Smartphones, social media (Facebook, Instagram), 
+            and smart home devices. </h4>
+          <h3>5. Basic Components of a Computer System</h3>
+          <h4>Hardware: Physical components like the keyboard, mouse, monitor, and CPU.</h4>
+             <h4> Software: Programs and instructions (e.g., Windows, MS Office) that tell the hardware what to do.</h4>
+              <h4>Central Processing Unit (CPU): Known as the "brain" of the computer. It includes:</h4>
+             <h4> ALU (Arithmetic Logic Unit): Performs mathematical and logical operations.</h4>
+             <h4> CU (Control Unit): Directs the operations of the processor.</h4>
+            <h4>  MU (Memory Unit): Stores data and instructions. </h4>
+            <h3>6. Digital Communication Tools</h3>
+            <h4> Tools commonly used for collaboration include:</h4>
+             <h4>Communication: Skype, Slack, and email.</h4>
+             <h4>Storage & Collaboration: Dropbox and Google Drive. </h4>
+             <h3>7. Safety and Security</h3>
+            <h4> Precautions: Install antivirus software, use strong passwords, and avoid sharing sensitive data online.</h4>
+             <h4>Cyber Hygiene: Regularly update software and be cautious of harmful digital content. </h4>
+    </div>
+
+    <!-- BOTTOM AD -->
+    
+  </main>
+</div>
+<head>
+  <meta name="monetag" content="9db0c32eca827e3e58085cd63d2d342c">
+</head>
+<!-- RIGHT AD -->
+
+
+<button class="float" id="topBtn">Top</button>
+<button class="float" id="themeBtn">☀️</button>
+<button class="float" id="contactBtn">Contact</button>
+
+<script>
+window.onload=()=>document.getElementById("loader").style.display="none";
+
+const menuBtn=document.getElementById("menuBtn");
+const sidebar=document.getElementById("sidebar");
+menuBtn.onclick=()=>sidebar.classList.toggle("show");
+
+document.getElementById("topBtn").onclick=()=>window.scrollTo({top:0,behavior:"smooth"});
+document.getElementById("themeBtn").onclick=()=>document.body.classList.toggle("light");
+</script>
+
+</body>
+
+</html>
